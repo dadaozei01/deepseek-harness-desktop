@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "description": "Unofficial cross-platform desktop distribution for DeepSeek Harness",
   "author": "dadaozei01",
+  "license": "MIT",
+  "homepage": "https://github.com/dadaozei01/deepseek-harness-desktop",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadaozei01/deepseek-harness-desktop.git"
+  },
   "private": true,
   "type": "module",
   "main": "dist/main.js",

@@ -17,11 +17,20 @@ describe('electron-builder configuration', () => {
   it('passes architecture as a flag instead of a Windows target name', async () => {
     const manifest = JSON.parse(await readFile('package.json', 'utf8')) as {
       author?: string
+      homepage?: string
+      license?: string
+      repository?: { type?: string; url?: string }
       dependencies?: Record<string, string>
       scripts?: Record<string, string>
     }
 
     expect(manifest.author).toBe('dadaozei01')
+    expect(manifest.license).toBe('MIT')
+    expect(manifest.homepage).toBe('https://github.com/dadaozei01/deepseek-harness-desktop')
+    expect(manifest.repository).toEqual({
+      type: 'git',
+      url: 'git+https://github.com/dadaozei01/deepseek-harness-desktop.git',
+    })
     expect(manifest.dependencies?.['@deepseek-ai/cordis-plugin-group']).toBe('1.0.1')
     expect(manifest.scripts?.['pack:dir']).toContain('--dir --win --x64')
     expect(manifest.scripts?.['pack:dir']).not.toContain('--win x64')
