@@ -95,7 +95,7 @@ jobs:
           body: |
             Unofficial DeepSeek Harness desktop distribution.
             Bundles DeepSeek Harness 0.1.0-rc.6.
-            Hotfix: includes all required upstream runtime peers and validates startup stability before showing the app window.
+            Windows hotfix: uses the official in-app directory browser instead of the unstable Win32 picker worker.
             This release is unsigned; see the installation guides for Windows SmartScreen and macOS Gatekeeper steps.
           files: |
             release-assets/*.exe

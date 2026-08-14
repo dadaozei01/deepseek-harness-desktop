@@ -1,0 +1,10 @@
+# The upstream Win32 native picker can terminate before returning a result on
+# some desktop installations. Pin the official in-app browser picker on
+# Windows so choosing a workspace never depends on a native worker process.
+- id: directory-picker
+  disabled: true
+- insert:
+    - id: directory-picker-browse
+      name: '@deepseek-ai/dsh-host-directory-picker-browse'
+    - id: ui-directory-picker-browse
+      name: '@deepseek-ai/dsh-client-ui-directory-picker-browse'

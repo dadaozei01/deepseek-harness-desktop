@@ -1,4 +1,5 @@
 import { app, BrowserWindow, dialog, shell } from 'electron'
+import { join } from 'node:path'
 import { startHarnessProcess, type HarnessHandle } from './harness-process.js'
 import { resolveDshCliEntry } from './paths.js'
 import { findFreeLoopbackPort } from './port.js'
@@ -51,6 +52,11 @@ async function bootstrap(): Promise<void> {
     port,
     timeoutMs: STARTUP_TIMEOUT_MS,
     stabilityMs: STARTUP_STABILITY_MS,
+    ...(process.platform === 'win32'
+      ? { patch: app.isPackaged
+        ? join(process.resourcesPath, 'directory-picker-browse.overlay.yml')
+        : join(app.getAppPath(), 'config', 'directory-picker-browse.overlay.yml') }
+      : {}),
   })
 
   harness.child.once('exit', code => {

@@ -8,6 +8,9 @@ files:
   - dist/**
   - node_modules/**
   - package.json
+extraResources:
+  - from: config/directory-picker-browse.overlay.yml
+    to: directory-picker-browse.overlay.yml
 directories:
   buildResources: build
   output: release

@@ -1,6 +1,11 @@
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
-import { startHarnessProcess, type HarnessHandle, type HarnessProcessOptions } from '../src/harness-process.js'
+import {
+  buildHarnessArguments,
+  startHarnessProcess,
+  type HarnessHandle,
+  type HarnessProcessOptions,
+} from '../src/harness-process.js'
 import { findFreeLoopbackPort } from '../src/port.js'
 
 const fixture = fileURLToPath(new URL('./fixtures/fake-harness.mjs', import.meta.url))
@@ -25,6 +30,21 @@ afterEach(async () => {
 })
 
 describe('startHarnessProcess', () => {
+  it('applies the desktop directory-picker overlay before web arguments', () => {
+    expect(buildHarnessArguments({
+      cliEntry: 'dsh.js',
+      patch: 'directory-picker-browse.overlay.yml',
+      host: '127.0.0.1',
+      port: 3080,
+    })).toEqual([
+      'dsh.js',
+      '--profile', 'web',
+      '--patch', 'directory-picker-browse.overlay.yml',
+      '--host', '127.0.0.1',
+      '--port', '3080',
+    ])
+  })
+
   it('starts the child and waits for HTTP readiness', async () => {
     const config = await options()
     const handle = await startHarnessProcess(config)

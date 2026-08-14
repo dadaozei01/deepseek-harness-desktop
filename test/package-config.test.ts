@@ -8,6 +8,7 @@ interface BuilderConfig {
   asar?: boolean
   asarUnpack?: string[]
   files?: string[]
+  extraResources?: Array<{ from?: string; to?: string }>
   win?: { icon?: string; target?: Array<{ target: string; arch: string[] }> }
   mac?: { icon?: string; identity?: string | null; target?: Array<{ target: string; arch: string[] }> }
   nsis?: { perMachine?: boolean; oneClick?: boolean }
@@ -76,6 +77,10 @@ describe('electron-builder configuration', () => {
     expect(config.asar).toBe(true)
     expect(config.asarUnpack).toContain('node_modules/**')
     expect(config.files).toContain('node_modules/**')
+    expect(config.extraResources).toContainEqual({
+      from: 'config/directory-picker-browse.overlay.yml',
+      to: 'directory-picker-browse.overlay.yml',
+    })
     expect(config.win?.target).toEqual([{ target: 'nsis', arch: ['x64'] }])
     expect(config.mac?.target).toEqual([{ target: 'dmg', arch: ['arm64', 'x64'] }])
     expect(config.mac?.identity).toBeNull()

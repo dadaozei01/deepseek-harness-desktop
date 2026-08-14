@@ -7,12 +7,30 @@ const STOP_TIMEOUT_MS = 2_000
 export interface HarnessProcessOptions {
   executable: string
   cliEntry: string
+  patch?: string
   cwd: string
   host: string
   port: number
   timeoutMs: number
   stabilityMs: number
   env?: NodeJS.ProcessEnv
+}
+
+export interface HarnessArgumentOptions {
+  cliEntry: string
+  patch?: string
+  host: string
+  port: number
+}
+
+export function buildHarnessArguments(options: HarnessArgumentOptions): string[] {
+  return [
+    options.cliEntry,
+    '--profile', 'web',
+    ...(options.patch === undefined ? [] : ['--patch', options.patch]),
+    '--host', options.host,
+    '--port', String(options.port),
+  ]
 }
 
 export interface HarnessHandle {
@@ -78,12 +96,7 @@ export async function startHarnessProcess(options: HarnessProcessOptions): Promi
   let diagnostics = ''
   let stopped = false
 
-  const child = spawn(options.executable, [
-    options.cliEntry,
-    '--profile', 'web',
-    '--host', options.host,
-    '--port', String(options.port),
-  ], {
+  const child = spawn(options.executable, buildHarnessArguments(options), {
     cwd: options.cwd,
     detached: process.platform !== 'win32',
     env: {
