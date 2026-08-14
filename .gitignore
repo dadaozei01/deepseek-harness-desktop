@@ -1,5 +1,6 @@
 /work/
 /outputs/
+/.worktrees/
 node_modules/
 dist/
 release/
