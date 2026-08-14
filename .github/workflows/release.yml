@@ -1,0 +1,103 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }}-${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: windows-latest
+            platform: windows
+            arch: x64
+            command: pnpm run dist:win
+            asset: release/DeepSeek-Harness-Desktop-*-Windows-x64.exe
+          - runner: macos-15
+            platform: macos
+            arch: arm64
+            command: pnpm run dist:mac:arm64
+            asset: release/DeepSeek-Harness-Desktop-*-macOS-arm64.dmg
+          - runner: macos-15-intel
+            platform: macos
+            arch: x64
+            command: pnpm run dist:mac:x64
+            asset: release/DeepSeek-Harness-Desktop-*-macOS-x64.dmg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Verify native runner architecture
+        env:
+          EXPECTED_ARCH: ${{ matrix.arch }}
+        run: node -e "if (process.arch !== process.env.EXPECTED_ARCH) { throw new Error('Expected ' + process.env.EXPECTED_ARCH + ', got ' + process.arch) }"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm run typecheck
+      - name: Build installer
+        run: ${{ matrix.command }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ matrix.platform }}-${{ matrix.arch }}
+          path: ${{ matrix.asset }}
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: installer-*
+          path: release-assets
+          merge-multiple: true
+      - name: Verify assets and write checksums
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          expected=(
+            "DeepSeek-Harness-Desktop-${version}-Windows-x64.exe"
+            "DeepSeek-Harness-Desktop-${version}-macOS-arm64.dmg"
+            "DeepSeek-Harness-Desktop-${version}-macOS-x64.dmg"
+          )
+          files=()
+          for name in "${expected[@]}"; do
+            file="release-assets/${name}"
+            test -f "${file}"
+            files+=("${file}")
+          done
+          actual_count="$(find release-assets -maxdepth 1 -type f \( -name '*.exe' -o -name '*.dmg' \) | wc -l | tr -d ' ')"
+          test "${actual_count}" = "${#expected[@]}"
+          node scripts/checksum.mjs release-assets/SHA256SUMS.txt "${files[@]}"
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          body: |
+            Unofficial DeepSeek Harness desktop distribution.
+            Bundles DeepSeek Harness 0.1.0-rc.6.
+            This first release is unsigned; see the installation guides for Windows SmartScreen and macOS Gatekeeper steps.
+          files: |
+            release-assets/*.exe
+            release-assets/*.dmg
+            release-assets/SHA256SUMS.txt
+          fail_on_unmatched_files: true
