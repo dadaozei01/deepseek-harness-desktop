@@ -21,9 +21,9 @@
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "pack:dir": "pnpm run build && electron-builder --dir --win --x64",
-    "dist:win": "pnpm run build && electron-builder --win nsis --x64",
-    "dist:mac:arm64": "pnpm run build && electron-builder --mac dmg --arm64",
-    "dist:mac:x64": "pnpm run build && electron-builder --mac dmg --x64",
+    "dist:win": "pnpm run build && electron-builder --win nsis --x64 --publish never",
+    "dist:mac:arm64": "pnpm run build && electron-builder --mac dmg --arm64 --publish never",
+    "dist:mac:x64": "pnpm run build && electron-builder --mac dmg --x64 --publish never",
     "verify:package": "node scripts/verify-package.mjs"
   },
   "dependencies": {

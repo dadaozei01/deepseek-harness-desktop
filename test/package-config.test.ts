@@ -34,6 +34,9 @@ describe('electron-builder configuration', () => {
     expect(manifest.dependencies?.['@deepseek-ai/cordis-plugin-group']).toBe('1.0.1')
     expect(manifest.scripts?.['pack:dir']).toContain('--dir --win --x64')
     expect(manifest.scripts?.['pack:dir']).not.toContain('--win x64')
+    for (const script of ['dist:win', 'dist:mac:arm64', 'dist:mac:x64']) {
+      expect(manifest.scripts?.[script], script).toContain('--publish never')
+    }
   })
 
   it('promotes upstream runtime peers so electron-builder retains them', async () => {
