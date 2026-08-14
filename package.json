@@ -2,6 +2,7 @@
   "name": "deepseek-harness-desktop",
   "version": "0.1.0",
   "description": "Unofficial cross-platform desktop distribution for DeepSeek Harness",
+  "author": "dadaozei01",
   "private": true,
   "type": "module",
   "main": "dist/main.js",
@@ -13,13 +14,28 @@
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "pack:dir": "pnpm run build && electron-builder --dir --win x64",
+    "pack:dir": "pnpm run build && electron-builder --dir --win --x64",
     "dist:win": "pnpm run build && electron-builder --win nsis --x64",
     "dist:mac:arm64": "pnpm run build && electron-builder --mac dmg --arm64",
-    "dist:mac:x64": "pnpm run build && electron-builder --mac dmg --x64"
+    "dist:mac:x64": "pnpm run build && electron-builder --mac dmg --x64",
+    "verify:package": "node scripts/verify-package.mjs"
   },
   "dependencies": {
-    "@deepseek-ai/dsh": "0.1.0-rc.6"
+    "@deepseek-ai/cordis-plugin-group": "1.0.1",
+    "@deepseek-ai/dsh": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-anonymous-user-id": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-atomic-write": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-fs": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-output-retention": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-sandbox": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-scope": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-session-telemetry": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-session-title-llm": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-shell": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-spill": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-subagent-in-process-driver": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-subprocess": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-timeout": "0.1.0-rc.6"
   },
   "devDependencies": {
     "@types/node": "22.20.0",

@@ -1,0 +1,48 @@
+appId: com.dadaozei01.deepseekharnessdesktop
+productName: DeepSeek Harness Desktop
+copyright: Copyright © 2026 dadaozei01
+asar: true
+asarUnpack:
+  - node_modules/**
+files:
+  - dist/**
+  - node_modules/**
+  - package.json
+directories:
+  buildResources: build
+  output: release
+npmRebuild: true
+buildDependenciesFromSource: false
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: DeepSeek-Harness-Desktop-${version}-Windows-${arch}.${ext}
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+mac:
+  icon: build/icon.png
+  category: public.app-category.developer-tools
+  identity: null
+  hardenedRuntime: false
+  target:
+    - target: dmg
+      arch:
+        - arm64
+        - x64
+  artifactName: DeepSeek-Harness-Desktop-${version}-macOS-${arch}.${ext}
+dmg:
+  title: DeepSeek Harness Desktop ${version}
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
