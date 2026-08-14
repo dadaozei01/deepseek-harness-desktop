@@ -1,0 +1,32 @@
+{
+  "name": "deepseek-harness-desktop",
+  "version": "0.1.0",
+  "description": "Unofficial cross-platform desktop distribution for DeepSeek Harness",
+  "private": true,
+  "type": "module",
+  "main": "dist/main.js",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "pack:dir": "pnpm run build && electron-builder --dir --win x64",
+    "dist:win": "pnpm run build && electron-builder --win nsis --x64",
+    "dist:mac:arm64": "pnpm run build && electron-builder --mac dmg --arm64",
+    "dist:mac:x64": "pnpm run build && electron-builder --mac dmg --x64"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh": "0.1.0-rc.6"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.0",
+    "electron": "35.7.0",
+    "electron-builder": "26.15.3",
+    "typescript": "6.0.3",
+    "vitest": "3.2.4",
+    "yaml": "2.8.1"
+  }
+}
