@@ -14,11 +14,11 @@
 
 从 [GitHub Releases](https://github.com/dadaozei01/deepseek-harness-desktop/releases) 下载对应安装包和 `SHA256SUMS.txt`：
 
-- Windows 10/11 x64：`DeepSeek-Harness-Desktop-0.1.0-Windows-x64.exe`
-- Apple Silicon Mac：`DeepSeek-Harness-Desktop-0.1.0-macOS-arm64.dmg`
-- Intel Mac：`DeepSeek-Harness-Desktop-0.1.0-macOS-x64.dmg`
+- Windows 10/11 x64：`DeepSeek-Harness-Desktop-0.1.1-Windows-x64.exe`
+- Apple Silicon Mac：`DeepSeek-Harness-Desktop-0.1.1-macOS-arm64.dmg`
+- Intel Mac：`DeepSeek-Harness-Desktop-0.1.1-macOS-x64.dmg`
 
-首个版本没有代码签名。请按照 [Windows 安装说明](docs/INSTALL_WINDOWS.md)或 [macOS 安装说明](docs/INSTALL_MACOS.md)中的安全步骤操作。
+当前版本没有代码签名。请按照 [Windows 安装说明](docs/INSTALL_WINDOWS.md)或 [macOS 安装说明](docs/INSTALL_MACOS.md)中的安全步骤操作。
 
 ## 与官方源码的区别
 

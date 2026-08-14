@@ -46,6 +46,9 @@ describe('electron-builder configuration', () => {
     const runtimePeers = [
       '@deepseek-ai/dsh-anonymous-user-id',
       '@deepseek-ai/dsh-atomic-write',
+      '@deepseek-ai/dsh-bash-local',
+      '@deepseek-ai/dsh-code-runtime',
+      '@deepseek-ai/dsh-compaction',
       '@deepseek-ai/dsh-fs',
       '@deepseek-ai/dsh-output-retention',
       '@deepseek-ai/dsh-sandbox',
@@ -57,6 +60,7 @@ describe('electron-builder configuration', () => {
       '@deepseek-ai/dsh-subagent-in-process-driver',
       '@deepseek-ai/dsh-subprocess',
       '@deepseek-ai/dsh-timeout',
+      '@deepseek-ai/dsh-workflow',
     ]
 
     for (const dependency of runtimePeers) {

@@ -4,9 +4,17 @@ import { pathToFileURL } from 'node:url'
 
 const TEXT_LIMIT = 1024 * 1024
 const CREDENTIAL_PATTERN = /(?:OPENAI|DEEPSEEK|ANTHROPIC|GITHUB)_(?:API_KEY|TOKEN)\s*=|\bsk-[A-Za-z0-9_-]{12,}/u
+const STATIC_DEEPSEEK_IMPORT_PATTERNS = [
+  /\b(?:import|export)\s+(?:[^'";]*?\s+from\s+)?['"](@deepseek-ai\/[^/'"]+)(?:\/[^'"]*)?['"]/gu,
+  /\bimport\s*\(\s*['"](@deepseek-ai\/[^/'"]+)(?:\/[^'"]*)?['"]\s*\)/gu,
+  /\brequire\s*\(\s*['"](@deepseek-ai\/[^/'"]+)(?:\/[^'"]*)?['"]\s*\)/gu,
+]
 const REQUIRED_RUNTIME_PEERS = [
   '@deepseek-ai/dsh-anonymous-user-id',
   '@deepseek-ai/dsh-atomic-write',
+  '@deepseek-ai/dsh-bash-local',
+  '@deepseek-ai/dsh-code-runtime',
+  '@deepseek-ai/dsh-compaction',
   '@deepseek-ai/dsh-fs',
   '@deepseek-ai/dsh-output-retention',
   '@deepseek-ai/dsh-sandbox',
@@ -18,6 +26,7 @@ const REQUIRED_RUNTIME_PEERS = [
   '@deepseek-ai/dsh-subagent-in-process-driver',
   '@deepseek-ai/dsh-subprocess',
   '@deepseek-ai/dsh-timeout',
+  '@deepseek-ai/dsh-workflow',
 ]
 
 async function walk(root) {
@@ -54,6 +63,22 @@ export async function verifyPackage(root) {
   for (const dependency of REQUIRED_RUNTIME_PEERS) {
     if (!hasPath(relativePaths, `resources/app.asar.unpacked/node_modules/${dependency}/package.json`)) {
       throw new Error(`Missing packaged runtime peer: ${dependency}`)
+    }
+  }
+
+  const packagedModulePrefix = 'resources/app.asar.unpacked/node_modules/'
+  for (const path of paths) {
+    const rel = normalizedRelative(root, path)
+    if (!rel.startsWith(packagedModulePrefix) || !/\.(?:c?js|mjs)$/u.test(rel)) continue
+    if (!(await stat(path)).isFile()) continue
+    const content = await readFile(path, 'utf8')
+    for (const pattern of STATIC_DEEPSEEK_IMPORT_PATTERNS) {
+      for (const match of content.matchAll(pattern)) {
+        const dependency = match[1]
+        if (!hasPath(relativePaths, `${packagedModulePrefix}${dependency}/package.json`)) {
+          throw new Error(`Missing packaged static import: ${dependency} (imported by ${rel})`)
+        }
+      }
     }
   }
   if (!hasPath(relativePaths, 'resources/app.asar.unpacked/node_modules/@deepseek-ai/dsh-web-frontend/package.json')) {

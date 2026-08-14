@@ -8,6 +8,9 @@ const temporaryDirectories: string[] = []
 const runtimePeers = [
   '@deepseek-ai/dsh-anonymous-user-id',
   '@deepseek-ai/dsh-atomic-write',
+  '@deepseek-ai/dsh-bash-local',
+  '@deepseek-ai/dsh-code-runtime',
+  '@deepseek-ai/dsh-compaction',
   '@deepseek-ai/dsh-fs',
   '@deepseek-ai/dsh-output-retention',
   '@deepseek-ai/dsh-sandbox',
@@ -19,6 +22,7 @@ const runtimePeers = [
   '@deepseek-ai/dsh-subagent-in-process-driver',
   '@deepseek-ai/dsh-subprocess',
   '@deepseek-ai/dsh-timeout',
+  '@deepseek-ai/dsh-workflow',
 ]
 
 async function fixture(): Promise<string> {
@@ -37,6 +41,7 @@ async function fixture(): Promise<string> {
     await mkdir(join(target, '..'), { recursive: true })
     await writeFile(target, 'safe fixture')
   }))
+  await mkdir(join(root, 'resources/app.asar.unpacked/node_modules/directory.js'))
   return root
 }
 
@@ -68,6 +73,16 @@ describe('verifyPackage', () => {
     await rm(join(root, 'resources/app.asar.unpacked/node_modules/@deepseek-ai/dsh-timeout/package.json'))
 
     await expect(verifyPackage(root)).rejects.toThrow('Missing packaged runtime peer: @deepseek-ai/dsh-timeout')
+  })
+
+  it('rejects an unresolved static DeepSeek runtime import', async () => {
+    const root = await fixture()
+    const target = join(root, 'resources/app.asar.unpacked/node_modules/@deepseek-ai/dsh/lib/plugin.js')
+    await writeFile(target, "import '@deepseek-ai/dsh-future-runtime'\n")
+
+    await expect(verifyPackage(root)).rejects.toThrow(
+      'Missing packaged static import: @deepseek-ai/dsh-future-runtime',
+    )
   })
 
   it('rejects development files and credential-shaped text', async () => {

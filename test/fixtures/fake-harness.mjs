@@ -24,6 +24,12 @@ if (process.env.FAKE_HARNESS_NO_LISTEN === '1') {
   })
 
   server.listen(port, host)
+  if (process.env.FAKE_HARNESS_EXIT_AFTER_LISTEN === '1') {
+    setTimeout(() => {
+      process.stderr.write('requested post-listen exit\n')
+      process.exit(24)
+    }, 250)
+  }
   process.on('SIGTERM', () => server.close(() => process.exit(0)))
   process.on('SIGINT', () => server.close(() => process.exit(0)))
 }

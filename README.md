@@ -14,11 +14,11 @@ This wrapper is maintained independently and is not an official DeepSeek product
 
 Download the installer and `SHA256SUMS.txt` from [GitHub Releases](https://github.com/dadaozei01/deepseek-harness-desktop/releases):
 
-- Windows 10/11 x64: `DeepSeek-Harness-Desktop-0.1.0-Windows-x64.exe`
-- Apple Silicon Mac: `DeepSeek-Harness-Desktop-0.1.0-macOS-arm64.dmg`
-- Intel Mac: `DeepSeek-Harness-Desktop-0.1.0-macOS-x64.dmg`
+- Windows 10/11 x64: `DeepSeek-Harness-Desktop-0.1.1-Windows-x64.exe`
+- Apple Silicon Mac: `DeepSeek-Harness-Desktop-0.1.1-macOS-arm64.dmg`
+- Intel Mac: `DeepSeek-Harness-Desktop-0.1.1-macOS-x64.dmg`
 
-The first release is unsigned. Follow the safe platform-specific steps in [Windows installation](docs/INSTALL_WINDOWS.md) or [macOS installation](docs/INSTALL_MACOS.md).
+The release is unsigned. Follow the safe platform-specific steps in [Windows installation](docs/INSTALL_WINDOWS.md) or [macOS installation](docs/INSTALL_MACOS.md).
 
 ## What this repository adds
 

@@ -11,6 +11,7 @@ export interface HarnessProcessOptions {
   host: string
   port: number
   timeoutMs: number
+  stabilityMs: number
   env?: NodeJS.ProcessEnv
 }
 
@@ -107,20 +108,24 @@ export async function startHarnessProcess(options: HarnessProcessOptions): Promi
   }
 
   const deadline = Date.now() + options.timeoutMs
+  let readyAt: number | undefined
   while (Date.now() < deadline) {
     if (child.exitCode !== null || child.signalCode !== null) {
       const code = child.exitCode === null ? child.signalCode : String(child.exitCode)
       const detail = diagnostics.trim()
-      throw new Error(`DeepSeek Harness exited before readiness (code ${code})${detail === '' ? '' : `\n${detail}`}`)
+      const phase = readyAt === undefined ? 'before readiness' : 'during startup validation'
+      throw new Error(`DeepSeek Harness exited ${phase} (code ${code})${detail === '' ? '' : `\n${detail}`}`)
     }
 
-    try {
-      const response = await fetch(url, { signal: AbortSignal.timeout(500) })
-      if (response.status < 500) {
-        return { url, child, stop }
+    if (readyAt === undefined) {
+      try {
+        const response = await fetch(url, { signal: AbortSignal.timeout(500) })
+        if (response.status < 500) readyAt = Date.now()
+      } catch {
+        // The local service has not started accepting requests yet.
       }
-    } catch {
-      // The local service has not started accepting requests yet.
+    } else if (Date.now() - readyAt >= options.stabilityMs) {
+      return { url, child, stop }
     }
     await delay(POLL_INTERVAL_MS)
   }

@@ -8,6 +8,7 @@ const LOOPBACK_HOST = '127.0.0.1'
 const FIRST_PORT = 3_080
 const LAST_PORT = 3_100
 const STARTUP_TIMEOUT_MS = 120_000
+const STARTUP_STABILITY_MS = 5_000
 
 let harness: HarnessHandle | undefined
 let mainWindow: BrowserWindow | undefined
@@ -49,6 +50,7 @@ async function bootstrap(): Promise<void> {
     host: LOOPBACK_HOST,
     port,
     timeoutMs: STARTUP_TIMEOUT_MS,
+    stabilityMs: STARTUP_STABILITY_MS,
   })
 
   harness.child.once('exit', code => {

@@ -9,7 +9,7 @@ This procedure publishes native Windows x64, macOS arm64, and macOS x64 installe
 3. Review upstream license, native dependency, and breaking-change notes.
 4. Confirm `git status --short` contains no `.env`, `.dsh`, `work/`, `outputs/`, local installers, or credentials.
 
-For the first release, the desktop tag is `v0.1.0` and the bundled Harness version is `0.1.0-rc.6`.
+For this hotfix release, the desktop tag is `v0.1.1` and the bundled Harness version is `0.1.0-rc.6`.
 
 ## 2. Install reproducibly
 
@@ -44,9 +44,9 @@ Launch the unpacked EXE, confirm the Harness UI responds on `127.0.0.1`, then cl
 git status -sb
 git log --oneline --decorate -10
 gh auth status
-git tag -a v0.1.0 -m "DeepSeek Harness Desktop v0.1.0"
+git tag -a v0.1.1 -m "DeepSeek Harness Desktop v0.1.1"
 git push origin main
-git push origin v0.1.0
+git push origin v0.1.1
 ```
 
 Never move or recreate a published version tag. If the gate fails, fix and retest before tagging.

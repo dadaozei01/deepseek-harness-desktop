@@ -3,7 +3,7 @@
 ## 适用系统
 
 - Windows 10/11，x64 处理器
-- 安装文件：`DeepSeek-Harness-Desktop-0.1.0-Windows-x64.exe`
+- 安装文件：`DeepSeek-Harness-Desktop-0.1.1-Windows-x64.exe`
 
 安装包已经内置运行环境，不需要安装 Node.js 或 pnpm。
 
@@ -12,7 +12,7 @@
 从本仓库的 GitHub Release 同时下载 EXE 和 `SHA256SUMS.txt`。在下载目录打开 PowerShell：
 
 ```powershell
-Get-FileHash '.\DeepSeek-Harness-Desktop-0.1.0-Windows-x64.exe' -Algorithm SHA256
+Get-FileHash '.\DeepSeek-Harness-Desktop-0.1.1-Windows-x64.exe' -Algorithm SHA256
 ```
 
 把输出值与 `SHA256SUMS.txt` 中对应文件的值逐字比较。不同则不要运行，并重新下载。
@@ -23,7 +23,7 @@ Get-FileHash '.\DeepSeek-Harness-Desktop-0.1.0-Windows-x64.exe' -Algorithm SHA25
 2. 选择当前用户安装位置并完成安装。
 3. 从开始菜单或桌面快捷方式启动。
 
-首个版本没有商业代码签名，因此 Windows SmartScreen 可能显示“Windows 已保护你的电脑”。只有在下载地址确实属于本仓库、且 SHA-256 校验一致时，才点击“更多信息”，核对应用名称，然后选择“仍要运行”。
+当前版本没有商业代码签名，因此 Windows SmartScreen 可能显示“Windows 已保护你的电脑”。只有在下载地址确实属于本仓库、且 SHA-256 校验一致时，才点击“更多信息”，核对应用名称，然后选择“仍要运行”。
 
 ## 首次启动
 

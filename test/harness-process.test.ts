@@ -15,6 +15,7 @@ async function options(overrides: Partial<HarnessProcessOptions> = {}): Promise<
     host: '127.0.0.1',
     port,
     timeoutMs: 5_000,
+    stabilityMs: 100,
     ...overrides,
   }
 }
@@ -38,6 +39,17 @@ describe('startHarnessProcess', () => {
 
     await expect(startHarnessProcess(config)).rejects.toThrow(
       /DeepSeek Harness exited before readiness \(code 23\).*requested early exit/s,
+    )
+  })
+
+  it('rejects a child that opens HTTP and then exits while plugins are loading', async () => {
+    const config = await options({
+      stabilityMs: 600,
+      env: { FAKE_HARNESS_EXIT_AFTER_LISTEN: '1' },
+    })
+
+    await expect(startHarnessProcess(config)).rejects.toThrow(
+      /DeepSeek Harness exited during startup validation \(code 24\).*requested post-listen exit/s,
     )
   })
 
